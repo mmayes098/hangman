@@ -1,15 +1,17 @@
 class Hangman
-  DICTIONARY = ["cat", "dog", "bootcamp", "pizza"]
+  dict = File.read("5desk.txt").split
+
+  DICTIONARY = dict.select { |ele| ele.length >= 5 && ele.length <= 12 }
 
   def self.random_word
     DICTIONARY.sample
   end
 
   def initialize
-    @secret_word = Hangman.random_word
+    @secret_word = Hangman.random_word.downcase
     @guess_word = Array.new(@secret_word.length, "_")
     @attempted_chars = []
-    @remaining_incorrect_guesses = 5
+    @remaining_incorrect_guesses = @secret_word.length + 2
   end
 
   def guess_word
@@ -67,8 +69,8 @@ class Hangman
   end
 
   def ask_user_for_guess
-    puts "Enter a char: "
-    char = gets.chomp
+    puts "Enter a letter: "
+    char = gets.chomp.downcase
     self.try_guess(char)
   end
 
