@@ -1,0 +1,16 @@
+--- !ruby/object:Hangman
+secret_word: facileness
+guess_word:
+- _
+- a
+- _
+- _
+- _
+- _
+- _
+- _
+- _
+- _
+attempted_chars:
+- a
+remaining_incorrect_guesses: 12

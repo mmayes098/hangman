@@ -1,3 +1,5 @@
+require "yaml"
+
 class Hangman
   dict = File.read("5desk.txt").split
 
@@ -12,6 +14,7 @@ class Hangman
     @guess_word = Array.new(@secret_word.length, "_")
     @attempted_chars = []
     @remaining_incorrect_guesses = @secret_word.length + 2
+    load_game
   end
 
   def guess_word
@@ -69,9 +72,27 @@ class Hangman
   end
 
   def ask_user_for_guess
+    puts "Would you like to save your game? Y or N"
+    save = gets.chomp.downcase
+    if save == "y"
+      File.open('savegame.yml', 'w') do |file|
+        file.write(YAML.dump(self))
+      end
+      puts "File saved!"
+      exit
+    end
     puts "Enter a letter: "
     char = gets.chomp.downcase
     self.try_guess(char)
+  end
+
+  def load_game
+    puts "Would you like to load a previously saved game? Y or N"
+    load = gets.chomp
+    if load == "y"
+      array = YAML.load(filename: "savegame.yml")
+      p array
+    end
   end
 
   def win?
