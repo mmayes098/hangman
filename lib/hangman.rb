@@ -17,6 +17,10 @@ class Hangman
     load_game
   end
 
+  def secret_word
+    @secret_word
+  end
+
   def guess_word
     @guess_word
   end
@@ -72,26 +76,31 @@ class Hangman
   end
 
   def ask_user_for_guess
-    puts "Would you like to save your game? Y or N"
-    save = gets.chomp.downcase
-    if save == "y"
+    puts "Enter a letter (or type 'save' to save your game): "
+    char = gets.chomp.downcase
+    if char == 'save'
       File.open('savegame.yml', 'w') do |file|
         file.write(YAML.dump(self))
       end
       puts "File saved!"
       exit
-    end
-    puts "Enter a letter: "
-    char = gets.chomp.downcase
+    end 
     self.try_guess(char)
   end
 
   def load_game
     puts "Would you like to load a previously saved game? Y or N"
-    load = gets.chomp
+    load = gets.chomp.downcase
     if load == "y"
-      array = YAML.load(filename: "savegame.yml")
-      p array
+      if File.exist?("savegame.yml")
+        save = YAML.load_file("savegame.yml")
+        @secret_word = save.secret_word
+        @guess_word = save.guess_word
+        @attempted_chars = save.attempted_chars
+        @remaining_incorrect_guesses = save.remaining_incorrect_guesses
+      else
+        puts "No save game exists!"
+      end
     end
   end
 
