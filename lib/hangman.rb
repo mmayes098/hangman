@@ -14,7 +14,7 @@ class Hangman
     @guess_word = Array.new(@secret_word.length, "_")
     @attempted_chars = []
     @remaining_incorrect_guesses = @secret_word.length + 2
-    load_game
+    load_game if File.exist?("savegame.yml")
   end
 
   def secret_word
